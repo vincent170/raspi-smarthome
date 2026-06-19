@@ -14,6 +14,10 @@ LOG_FILE = "sensor_data.csv"
 current_goal = 0.0#tracks active temp to go to
 running = True
 
+
+HEATER_ON = GPIO.LOW
+HEATER_OFF = GPIO.HIGH
+
 #queue and state vars
 command_queue = queue.Queue()
 history_queue = []
@@ -26,7 +30,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(FANPIN, GPIO.OUT)
 GPIO.setup(HEATERPIN, GPIO.OUT)
 GPIO.output(FANPIN, GPIO.LOW)
-GPIO.output(HEATERPIN, GPIO.LOW)
+GPIO.output(HEATERPIN, HEATER_OFF)
 
 i2c = board.I2C()
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x76)
@@ -46,7 +50,7 @@ def log_data():
         try:
             t, h, p = bme280.temperature, bme280.relative_humidity, bme280.pressure
             f_s = 1 if GPIO.input(FANPIN) else 0
-            h_s = 1 if GPIO.input(HEATERPIN) else 0
+            h_s = 1 if GPIO.input(HEATERPIN) == HEATER_ON else 0
             write_to_csv([time.strftime("%Y-%m-%d %H:%M:%S"), f"{t:.2f}", f"{h:.2f}", f"{p:.2f}", current_goal, f_s, h_s])
         except: pass 
         time.sleep(5)
@@ -58,7 +62,7 @@ def display_status():
         try:
             t = bme280.temperature
             f_s = "ON" if GPIO.input(FANPIN) else "OFF"
-            h_s = "ON" if GPIO.input(HEATERPIN) else "OFF"
+            h_s = "ON" if GPIO.input(HEATERPIN) == HEATER_ON else "OFF"
             next_tasks = list(command_queue.queue)[:2] 
             queue_str = " -> ".join(next_tasks) if next_tasks else "None"
             #shwo current temp
@@ -98,7 +102,7 @@ def mission_runner():
                         break
                     
                     if (time.time() - start_wait) > timeout_seconds:
-                        GPIO.output(HEATERPIN, GPIO.LOW)
+                        GPIO.output(HEATERPIN, HEATER_OFF)
                         write_to_csv([f"TIMEOUT: Goal {current_goal}C failed. HEATER OFF", "", "", "", "", "", ""])
                         print(f"\n[ALERT] Timeout reached. Heater forced OFF.")
                         break
@@ -112,7 +116,7 @@ def mission_runner():
                     time.sleep(1)
                     
             elif cmd_type == "heater":
-                GPIO.output(HEATERPIN, GPIO.HIGH if parts[1] == "on" else GPIO.LOW)
+                GPIO.output(HEATERPIN, HEATER_ON if parts[1] == "on" else HEATER_OFF)
             elif cmd_type == "fan":
                 GPIO.output(FANPIN, GPIO.HIGH if parts[1] == "on" else GPIO.LOW)
             elif cmd_type == "line":
@@ -168,7 +172,7 @@ try:
         elif cmd == "line": write_to_csv(["-"*20, "", "", "", "", "", ""])
         elif cmd.startswith("note "): write_to_csv([f"NOTE: {cmd[5:]}", "", "", "", "", "", ""])
         elif cmd in ["fan on", "fan off"]: GPIO.output(FANPIN, GPIO.HIGH if "on" in cmd else GPIO.LOW)
-        elif cmd in ["heater on", "heater off"]: GPIO.output(HEATERPIN, GPIO.HIGH if "on" in cmd else GPIO.LOW)
+        elif cmd in ["heater on", "heater off"]: GPIO.output(HEATERPIN, HEATER_ON if "on" in cmd else HEATER_OFF)
         elif cmd == "exit":
             running = False
             break
