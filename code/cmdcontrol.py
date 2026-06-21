@@ -1,3 +1,6 @@
+# FOR CODE DOCUMENTATION DO NOT VIEW THIS, THERE IS A SEPERATE FILE FOR THIS
+
+
 import RPi.GPIO as GPIO
 import board
 import threading
