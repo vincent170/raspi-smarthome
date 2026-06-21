@@ -26,11 +26,13 @@ Hi. We are students based in London in the UK. Our goal is to experiment with ho
 | [No roof experiment](https://github.com/vincent331/raspi-smarthome/blob/main/experiments/Noroof.md) | - Without a roof, warm air escapes the house at a **outstanding** rate, leading to slower heating and faster heat loss - we used this as our control |
 
 
-## Our code
+## Our code directory
 
 | Name | Description |
 |------|-------------|
-| [bmetest](bmetest.py) | A program for quickly diagnosing the bme280 sensor which we use to record the temperature. |
+| [bmetest](https://github.com/vincent331/raspi-smarthome/blob/main/code/tests/bmetest.py) | A program for quickly diagnosing the bme280 sensor which we use to record the temperature. |
+| [cmdcontrol](https://github.com/vincent331/raspi-smarthome/blob/main/code/cmdcontrol.py) | A program that allows us to control the sensors using commands and a queue feature |
+| [cmdcontrol documentation](https://github.com/vincent331/raspi-smarthome/blob/main/code/codedoc.md) | The documentation for the code above |
 
 ## Our construction process
 > If you are interested, we recommend replicating this experiment yourself! We'd we excited to hear from your results. Please, make yourself welcome to use our code and our CAD. All CAD files are available below. If you do experiment, don't hesitate to ask us some questions down below or to publish findings to us - we'd love to hear them!
