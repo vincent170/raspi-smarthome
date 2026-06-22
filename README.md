@@ -46,4 +46,4 @@ Hi. We are students based in London in the UK. Our goal is to experiment with ho
 
 ## Contact us
 Feel free to contact us if you have any questions, or even new findings.
-VincentHao100@hotmail.com - Response within 24 hours
+VincentHao100@hotmail.com & arjunaiyar18@gmail.com - Response within 24 hours
