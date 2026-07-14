@@ -2,11 +2,11 @@ import pandas as pd
 from pathlib import Path
  
 #edit to change
-csv = "/Users/vince/Downloads/60.csv"
+csv = "/Users/vince/Downloads/45.csv"
 clustercol = "Heater_Status" #column to display for clusters (1)
 tempcol = "Temp_C" #column to display for clusters(2)
 nstep = 5 #measured every 5s so 5 increment
-outputfile = "clusters60.txt" 
+outputfile = "clusters45.txt" 
 
 
 outputfile = Path.home() / "Downloads" / outputfile
